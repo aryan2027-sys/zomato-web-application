@@ -1,0 +1,82 @@
+Initiate a project - npm init y
+
+Install the essential packages
+
+Create a server - express
+
+create a src folder and then create a app.js - to create a server in the app.js
+create a server.js folder in the backend root folder - to start the server
+
+connect the mongodb server
+create a db folder -> db.js -> create a connectionDB function
+install the mongoose package and use mongoose.connect to connect the database
+export it to the server.js and start the connection at server.js
+
+Now the very first thing would come you need to create authentication routes.
+->create a routes folder -> auth.routes.js 
+
+
+In the controllers
+
+auth.controller.js
+you need to make the functionalities for the authentication
+registerUser, loginUser
+
+example for registerUser
+->first check whether what data we're getting from the frontend body
+->then check whether any data is present in the database matching the email or not. userModel.findOne({email})
+->return the response accordingly if yes return a message regarding the existing email
+->else create an object saving the user information in the database.
+->then create a token - jwt.sign({_id:user._id},"SECRET_KEY"), save the token in cookies res.cookie("token", token)
+->return the response as successful with some user information.
+
+
+Note : Don't ever put the secret keys directly in the method - create a dot env file and add the secret key
+require it at the server.js file and access it by using process.env.VARIABLE_NAME.
+
+******************************************************************************************************************
+
+Now the next thing would be creating a food item which would be created by a food partner.
+-> Create a model
+-> Then create foodItem.routes.js where all the routes for the foodItem would be there. and export it
+-> Import it at the app.js to use it as a router - Means create an end point for the router.
+
+******************************************************************************************************************
+
+//Very important point for the routes is : 
+
+-> create the first route with post method to create a new fooditem - but it should be a protected route.
+// /api/food-item/  {protected} //
+
+-> create a auth.middleware.js in a middleware folder
+
+How the middleware works and what would be the logic for the middleware?
+so this middleware is going to check whether the logged in user is authorised and then would check whether it's a food-partner or not.
+
+In the middleware function authFoodPartnerMiddleware there are 3 parameters - req,res,next
+1. first it will check whether there's a token or not
+2. then will check whether it is correct token or not in a try catch block
+3. try - verify the token using jwt.verify whether the token is correct or not
+4. If it gets a data in the decoded variable because in the token there would be an id that was stored while logging in and registering for the food-partner.
+5. If there's no value in the decoded variable it will throw an error in the catch block.
+6. A next() function would be called which is going to pass all the functionalities to the next controller.
+
+Now the middleware would be called in the router before the controller so first of all the request would be checked at the middleware.
+
+router.post("/", middleware, controller)
+
+
+******************************************************************************************************************
+
+Note in the controller - foodItemController
+-> createFood function the req.body would get 4 things - name, email, video, description
+-> Note that video can't be sent to the controller in a raw format.
+
+
+
+
+
+
+
+
+
